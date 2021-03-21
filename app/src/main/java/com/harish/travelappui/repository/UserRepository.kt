@@ -57,6 +57,20 @@ class UserRepository(val context: Context) {
         return uid
     }
 
+    fun hasLoggedin(): HashMap<Boolean,Int> {
+        val uid = preferences.getInt("uid",0)
+        if(uid!=0){
+            return hashMapOf(Pair(true,uid))
+        }
+        return hashMapOf(Pair(false,uid))
+    }
+
+    fun logoutUser(){
+        val editor = preferences.edit()
+        editor.remove("uid")
+
+    }
+
 
 }
 

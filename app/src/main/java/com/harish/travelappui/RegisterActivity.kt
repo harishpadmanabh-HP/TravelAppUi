@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -93,20 +94,33 @@ class RegisterActivity : AppCompatActivity() {
 
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val upload = storageRef.putBytes(baos.toByteArray())
+
         upload.addOnCompleteListener { uploadTask ->
 
             if (uploadTask.isSuccessful) {
+
+
+
                 storageRef.downloadUrl.addOnCompleteListener { downloadURLTask ->
                     downloadURLTask.result?.let {
                         imageUri = it
                         Log.e("dp uri", it.toString())
-                        iv_profile_image.setImageBitmap(imageBitmap)
+                       // iv_profile_image.setImageBitmap(imageBitmap)
                         Toast.makeText(this, "Added dp", Toast.LENGTH_SHORT).show()
                         hasDpAdded = true
                     }
 
                 }
+
+                GlideApp.with(this)
+                    .load(storageRef)
+                    .into(iv_profile_image)
+
+
+
+
             }
+
 
         }
     }
@@ -143,6 +157,7 @@ class RegisterActivity : AppCompatActivity() {
                         progressDialog.visibility = View.GONE
                         Toast.makeText(this@RegisterActivity, "Registerd", Toast.LENGTH_SHORT)
                             .show()
+                        startActivity(Intent(this@RegisterActivity,HomeActivity::class.java))
                     }
                     AuthState.REG_FAILED -> {
                         progressDialog.visibility = View.GONE
