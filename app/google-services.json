@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "431586402946",
+    "project_id": "travelappui-5f65c",
+    "storage_bucket": "travelappui-5f65c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:431586402946:android:bef06d280c65186a950a9b",
+        "android_client_info": {
+          "package_name": "com.harish.travelappui"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "431586402946-40kj05bfe35c5ajo7tq66o8q28lhe4j3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3ebmgy8BbHq9XagVAcxHokeg37YGT9xc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "431586402946-40kj05bfe35c5ajo7tq66o8q28lhe4j3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
