@@ -2,12 +2,22 @@ package com.harish.travelappui.repository
 
 import android.content.Context
 import android.location.Location
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.gson.Gson
+import com.harish.travelappui.models.User
 
 enum class AuthState{
-    REG_SUCCESS,REG_FAILED,REG_INIT,
-    LOCATION_RETRIEVED_SUCCES
+    REG_SUCCESS,
+    REG_FAILED,
+    REG_INIT,
+    LOCATION_RETRIEVED_SUCCES,
+    LOGIN_SUCCESS,
+    LOGIN_FAILED,
+    LOGIN_INIT
 }
 
 class UserRepository(val context: Context) {
@@ -25,7 +35,7 @@ class UserRepository(val context: Context) {
         password: String,
         lastLocation: Location?,
         uid: Int,
-        dpUri: String
+        dpUri: Any
     ) {
         authStatus.postValue(AuthState.REG_INIT)
 
@@ -34,18 +44,42 @@ class UserRepository(val context: Context) {
         userMap.put("email", email)
         userMap.put("password", password)
         userMap.put("uid", uid)
-        userMap.put("dpUri", dpUri)
+        userMap.put("dpUri", dpUri.toString())
         lastLocation?.latitude?.let { userMap.put("latitude", it) }
         lastLocation?.longitude?.let { userMap.put("longitude", it) }
+        userMap.put("fcmToken",getFCMToken())
+
+        val user = lastLocation?.let {
+            User(
+                name, username, password, email, dpUri, it, getFCMToken(), uid
+            )
+        }
+
 
 
 
         db.collection("users")
             .document(username).set(userMap).addOnSuccessListener {
-              authStatus.postValue(AuthState.REG_SUCCESS)
+                if (user != null) {
+                    saveUser(user)
+                }
+                authStatus.postValue(AuthState.REG_SUCCESS)
+
             }.addOnFailureListener {
               authStatus.postValue(AuthState.REG_FAILED)
             }
+
+    }
+
+    fun saveUser(user:User){
+        val editor = preferences.edit()
+        editor.putString("user_data",Gson().toJson(user))
+        editor.apply()
+    }
+
+    fun getUser():User?{
+        val user = Gson().fromJson(preferences.getString("user_data",null),User::class.java)
+        return user
 
     }
 
@@ -70,6 +104,41 @@ class UserRepository(val context: Context) {
         editor.remove("uid")
 
     }
+
+    fun loginUser(username: String, password: String) {
+        authStatus.postValue(AuthState.LOGIN_INIT)
+
+        db.collection("users").document(username)
+            .get().addOnSuccessListener {
+               Log.e("PASSWORD","${it["password"]}")
+                val registerdPasword = it["password"].toString()
+                if(registerdPasword.equals(password))
+                    authStatus.postValue(AuthState.LOGIN_SUCCESS)
+                else
+                    authStatus.postValue(AuthState.LOGIN_FAILED)
+            }.addOnFailureListener {
+                Log.e("LOGIN EXC","$it")
+                authStatus.postValue(AuthState.LOGIN_FAILED)
+
+            }
+
+
+
+    }
+
+
+    fun saveFCMToken(token:String){
+        val editor=preferences.edit()
+        editor.putString("fcm_token",token)
+        editor.commit()
+    }
+
+    fun getFCMToken():String{
+        var token: String = preferences.getString("fcm_token","").toString()
+        return token
+    }
+
+    fun getUserDp(uid:String):StorageReference = FirebaseStorage.getInstance().reference.child("pics/$uid")
 
 
 }

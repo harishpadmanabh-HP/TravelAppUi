@@ -18,15 +18,20 @@ class UserAuthViewModel(val app: Application):AndroidViewModel(app) {
         password: String,
         lastLocation: Location?,
         uid: Int,
-        dpUri: String
+        dpUri: Any
     ) {
         userRepository.registerUser(name, username, email, password,lastLocation,uid,dpUri)
     }
 
     fun generateUid()=userRepository.generateUid()
+    fun loginUser(username: String, password: String) {
+        userRepository.loginUser(username,password)
 
+    }
 
+    fun getUser() = userRepository.getUser()
 
+    fun getUserDp(uid:String) = userRepository.getUserDp(uid)
 
 
 }

@@ -65,7 +65,7 @@ class RegisterActivity : AppCompatActivity() {
                     Toast.makeText(this, "Fill all fields", Toast.LENGTH_SHORT).show()
                 } else {
 
-                    viewModel.createUser(name, username, email, password,lastLocation,uid,imageUri.toString())
+                    viewModel.createUser(name, username, email, password,lastLocation,uid,imageUri)
                 }
             }else{
                 Toast.makeText(this, "Something went wrong when adding dp or getting your location.", Toast.LENGTH_SHORT).show()
@@ -157,7 +157,7 @@ class RegisterActivity : AppCompatActivity() {
                         progressDialog.visibility = View.GONE
                         Toast.makeText(this@RegisterActivity, "Registerd", Toast.LENGTH_SHORT)
                             .show()
-                        startActivity(Intent(this@RegisterActivity,HomeActivity::class.java))
+                        startActivity(Intent(this@RegisterActivity,HomeV2::class.java))
                     }
                     AuthState.REG_FAILED -> {
                         progressDialog.visibility = View.GONE
@@ -295,9 +295,7 @@ class RegisterActivity : AppCompatActivity() {
         MaterialAlertDialogBuilder(this)
             .setTitle("Show us your Smile")
             .setMessage("Get your image from ")
-            .setNeutralButton("Cancel") { dialog, which ->
-                dialog.cancel()
-            }
+            .setCancelable(false)
             .setNegativeButton("Gallery") { dialog, which ->
                 openGallery()
             }

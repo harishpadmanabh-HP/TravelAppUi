@@ -12,6 +12,7 @@ class HomeViewModel(val app: Application) : AndroidViewModel(app) {
     val events = MutableLiveData<String>()
     val cities = MutableLiveData<CitiesResponse>()
 
+
     fun getCities() {
         repository.getCities(onApiCallback = { status, message, response ->
             if (status) {

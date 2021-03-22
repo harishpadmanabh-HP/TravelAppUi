@@ -13,4 +13,13 @@
         <item name="android:statusBarColor" tools:targetApi="l">@color/mediumGray</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Theme.TravelAppUi.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.TravelAppUi.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.TravelAppUi.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
